@@ -9,22 +9,24 @@ async fn main() {
     //
     //  Maybe hand craft the json, write our own code to tile the png to textures, or split the png
     //  to separate image files.
+    //
+    //  Drawing manually seems a lot easier!
     let tileset = load_texture("assets/dejavu10x10_gs_tc.png").await.unwrap();
-    let tileset_json = load_string("assets/dejavu10x10_gs_tc.tsj").await.unwrap();
-    let tileset_map =
-        macroquad_tiled::load_map(&tileset_json, &[("dejavu10x10_gs_tc.png", tileset)], &[])
-            .unwrap();
-
-    dbg!(&tileset_map);
-
-    // let player = tileset_map
-    //     .get_tile("dejavu10x10_gs_tc.png", 0, 10)
-    //     .as_ref()
-    //     .unwrap();
+    let player_tile = Rect::new(0., 10.0, 10., 10.);
 
     loop {
         clear_background(BLACK);
-        draw_texture(tileset, 0., 100., WHITE);
+        draw_texture_ex(
+            tileset,
+            10.,
+            10.,
+            WHITE,
+            DrawTextureParams {
+                flip_y: true,
+                source: Some(player_tile),
+                ..Default::default()
+            },
+        );
 
         next_frame().await
     }
